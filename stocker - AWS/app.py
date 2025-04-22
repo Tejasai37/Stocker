@@ -139,16 +139,16 @@ def delete_trader_by_id(trader_id):
     if not email:
         print(f"User with ID {trader_id} has no email")
         return False
-    # 1. Delete the user
-    user_table = dynamodb.Table(USER_TABLE)
-    user_table.delete_item(Key={'email': trader_id})
     
-    # 2. Delete all portfolio items for the user
+    # 1. Delete all portfolio items for the user
     portfolio_table = dynamodb.Table(PORTFOLIO_TABLE)
     portfolio_response = portfolio_table.query(
         KeyConditionExpression=Key('user_id').eq(trader_id)
     )
-    
+   
+    # 2. Delete the user
+    user_table = dynamodb.Table(USER_TABLE)
+    user_table.delete_item(Key={'email': trader_id})
     for item in portfolio_response.get('Items', []):
         portfolio_table.delete_item(
             Key={
