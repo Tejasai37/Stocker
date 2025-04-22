@@ -463,6 +463,15 @@ def service02():
        return redirect(url_for('login'))
    
     transactions = get_transactions()
+    for transaction in transactions:
+        if 'transaction_date' in transaction and transaction['transaction_date']:
+            try:
+                # Convert ISO string to datetime object
+                transaction['transaction_date'] = datetime.fromisoformat(transaction['transaction_date'])
+            except (ValueError, TypeError):
+                # If conversion fails, set to None
+                transaction['transaction_date'] = None
+      
     return render_template('service-details-2.html', transactions=transactions)
 
 @app.route('/service03')
