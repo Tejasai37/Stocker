@@ -555,7 +555,7 @@ def buy_stock(stock_id):
         if portfolio_entry:
             # Update existing portfolio entry
             total_value = (float(portfolio_entry['quantity']) * float(portfolio_entry['average_price'])) + (quantity * float(stock['price']))
-            total_quantity = portfolio_entry['quantity'] + quantity
+            total_quantity = float(portfolio_entry['quantity']) + quantity
             avg_price = total_value / total_quantity
             
             update_portfolio(
