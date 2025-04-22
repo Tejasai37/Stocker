@@ -481,7 +481,7 @@ def service03():
     total_portfolio_value = 0
     for portfolio in portfolios:
         if 'stock' in portfolio:
-            total_portfolio_value += portfolio['quantity'] * float(portfolio['stock']['price'])
+            total_portfolio_value += float(portfolio['quantity']) * float(portfolio['stock']['price'])
     
     return render_template('service-details-3.html', 
                           portfolios=portfolios, 
