@@ -723,7 +723,18 @@ def service05():
     
     # Get transaction history
     transactions = get_user_transactions(user['id'])
-    
+    # Convert transaction dates to datetime objects
+    for transaction in transactions:
+        if 'transaction_date' in transaction and transaction['transaction_date']:
+            try:
+                # Convert ISO string to datetime object if it's not already
+                if isinstance(transaction['transaction_date'], str):
+                    transaction['transaction_date'] = datetime.fromisoformat(transaction['transaction_date'])
+            except (ValueError, TypeError) as e:
+                print(f"Error converting date: {str(e)}")
+                # If conversion fails, set to None
+                transaction['transaction_date'] = None
+               
     return render_template('service-details-5.html', user=user, portfolio=portfolio, total_value=total_value, transactions=transactions)
 
 @app.route('/debug/check_stocks')
