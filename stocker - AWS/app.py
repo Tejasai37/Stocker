@@ -434,6 +434,8 @@ def delete_trader_route(trader_id):
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('login'))
+
+    user = get_user_by_email(session.get('email'))
    
     if not user:
        session.clear()
