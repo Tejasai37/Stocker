@@ -589,7 +589,7 @@ def buy_stock(stock_id):
         send_notification(
             TRANSACTION_TOPIC_ARN,
             f"Stock Purchase: {stock['symbol']}",
-            f"User {user['username']} purchased {quantity} shares of {stock['symbol']} at ${stock['price']} per share.",
+            f"User {user['username']} purchased {quantity} shares of {stock['symbol']} at ₹{stock['price']} per share.",
             {
                 'event_type': {
                     'DataType': 'String',
@@ -671,7 +671,7 @@ def sell_stock(stock_id):
         send_notification(
             TRANSACTION_TOPIC_ARN,
             f"Stock Purchase: {stock['symbol']}",
-            f"User {user['username']} purchased {quantity} shares of {stock['symbol']} at ${stock['price']} per share.",
+            f"User {user['username']} purchased {quantity} shares of {stock['symbol']} at ₹{stock['price']} per share.",
             {
                 'event_type': {
                     'DataType': 'String',
