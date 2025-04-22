@@ -127,7 +127,7 @@ def get_traders():
     )
     return response.get('Items', [])
 
-def delete_trader(trader_id):
+def delete_trader_by_id(trader_id):
     """Delete a trader by ID"""
     # 1. Delete the user
     user_table = dynamodb.Table(USER_TABLE)
@@ -430,7 +430,7 @@ def service01():
     return render_template('service-details-1.html', traders=traders)   
 
 @app.route('/delete_trader/<string:trader_id>', methods=['POST'])
-def delete_trader_route(trader_id): 
+def delete_trader(trader_id): 
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('login'))
@@ -442,7 +442,7 @@ def delete_trader_route(trader_id):
        flash("Your account no longer exists.", "danger")
        return redirect(url_for('login'))
    
-    success = delete_trader(trader_id)
+    success = delete_trader_by_id(trader_id)
     if success:
         flash("Trader deleted successfully.", "success")
     else:
