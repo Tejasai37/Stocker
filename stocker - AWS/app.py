@@ -700,7 +700,14 @@ def service05():
     portfolio = get_user_portfolio(user['id'])
     
     # Calculate total portfolio value
-    total_value = sum(item['quantity'] * float(item['stock']['price']) for item in portfolio if 'stock' in item)
+    total_value = 0
+    try:
+        for item in portfolio:
+            if 'stock' in item and 'price' in item['stock'] and 'quantity' in item:
+                total_value += item['quantity'] * float(item['stock']['price'])
+    except Exception as e:
+        print(f"Error calculating portfolio value: {str(e)}")
+        flash("There was an issue calculating your portfolio value.", "warning")
     
     # Get transaction history
     transactions = get_user_transactions(user['id'])
