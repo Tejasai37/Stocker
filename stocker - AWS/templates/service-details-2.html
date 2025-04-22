@@ -101,7 +101,7 @@
                     {{ transaction.status }}
                   </span>
                 </td>
-                <td>{{ transaction.transaction_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ transaction.transaction_date.strftime('%Y-%m-%d %H:%M') if transaction.transaction_date else 'N/A' }}</td>
             </tr>
             {% endfor %}
         </tbody>
