@@ -319,6 +319,7 @@ def login():
 
         if user and user['password'] == password and user['role'] == role:
             print("Login successful!")
+            session.clear()  # Clear any existing session data
             session['email'] = user['email']
             session['role'] = user['role']
             session['user_id'] = user['id']
