@@ -58,8 +58,8 @@ else:
     sns = boto3.client('sns', region_name=AWS_REGION)
 
 # SNS Topic ARNs
-USER_ACCOUNT_TOPIC_ARN = arn:aws:sns:us-east-1:604665149129:StockerUserAccountTopic
-TRANSACTION_TOPIC_ARN = arn:aws:sns:us-east-1:604665149129:StockerTransactionTopic
+USER_ACCOUNT_TOPIC_ARN = "arn:aws:sns:us-east-1:604665149129:StockerUserAccountTopic"
+TRANSACTION_TOPIC_ARN = "arn:aws:sns:us-east-1:604665149129:StockerTransactionTopic"
 
 def send_notification(topic_arn, subject, message, attributes=None):
     """Send an SNS notification"""
