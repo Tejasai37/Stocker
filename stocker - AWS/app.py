@@ -265,7 +265,14 @@ def create_transaction(user_id, stock_id, action, quantity, price, status='compl
 def update_portfolio(user_id, stock_id, quantity, average_price):
     """Update or create a portfolio item"""
     table = dynamodb.Table(PORTFOLIO_TABLE)
+
+    # Ensure quantity and average_price are Decimal objects
+    if not isinstance(quantity, Decimal):
+        quantity = Decimal(str(quantity))
     
+    if not isinstance(average_price, Decimal):
+        average_price = Decimal(str(average_price))
+       
     # Check if portfolio item exists
     existing = get_portfolio_item(user_id, stock_id)
     
@@ -554,14 +561,19 @@ def buy_stock(stock_id):
         
         if portfolio_entry:
             # Update existing portfolio entry
-            total_value = (float(portfolio_entry['quantity']) * float(portfolio_entry['average_price'])) + (quantity * float(stock['price']))
-            total_quantity = float(portfolio_entry['quantity']) + quantity
+            quantity_decimal = Decimal(str(quantity))
+            portfolio_quantity = Decimal(str(portfolio_entry['quantity']))
+            portfolio_avg_price = Decimal(str(portfolio_entry['average_price']))
+            stock_price = Decimal(str(stock['price']))
+
+            total_value = (portfolio_quantity * portfolio_avg_price) + (quantity_decimal * stock_price)
+            total_quantity = portfolio_quantity + quantity_decimal
             avg_price = total_value / total_quantity
             
             update_portfolio(
                 user_id=user['id'],
                 stock_id=stock_id,
-                quantity=total_quantity,
+                quantity=Decimal(str(quantity)),
                 average_price=avg_price
             )
         else:
@@ -569,8 +581,8 @@ def buy_stock(stock_id):
             update_portfolio(
                 user_id=user['id'],
                 stock_id=stock_id,
-                quantity=quantity,
-                average_price=float(stock['price'])
+                quantity=Decimal(str(quantity)),
+                average_price=Decimal(str(stock['price']))
             )
 
         # Send transaction notification
