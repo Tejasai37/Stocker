@@ -129,9 +129,19 @@ def get_traders():
 
 def delete_trader_by_id(trader_id):
     """Delete a trader by ID"""
+    # First, get the user's email
+    user = get_user_by_id(trader_id)
+    if not user:
+        print(f"User with ID {trader_id} not found")
+        return False
+    
+    email = user.get('email')
+    if not email:
+        print(f"User with ID {trader_id} has no email")
+        return False
     # 1. Delete the user
     user_table = dynamodb.Table(USER_TABLE)
-    user_table.delete_item(Key={'id': trader_id})
+    user_table.delete_item(Key={'email': trader_id})
     
     # 2. Delete all portfolio items for the user
     portfolio_table = dynamodb.Table(PORTFOLIO_TABLE)
