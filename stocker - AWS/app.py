@@ -6,13 +6,13 @@ from datetime import datetime
 from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
 import json
-from flask_session import Session
+from flask_session import Session as FlaskSession
 
 app = Flask(__name__)
 app.secret_key = "stocker_secret_2024"
 app.config['SESSION_TYPE'] = 'filesystem'
 
-Session(app)
+FlaskSession(app)    
 
 # AWS Configuration
 # For local development - use environment variables
