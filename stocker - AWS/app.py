@@ -7,11 +7,9 @@ from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
 import json
 
-
 app = Flask(__name__)
 app.secret_key = "stocker_secret_2024"
    
-
 # AWS Configuration
 # For local development - use environment variables
 # For EC2 deployment with IAM role - remove credentials and just use region
@@ -53,7 +51,6 @@ def clean_dynamo_response(response):
         return None
     return json.loads(json.dumps(response, cls=DecimalEncoder))
 
-
 # Create SNS client
 if AWS_ACCESS_KEY and AWS_SECRET_KEY:
     sns = boto3_session.client('sns')
@@ -61,33 +58,30 @@ else:
     sns = boto3.client('sns', region_name=AWS_REGION)
 
 # SNS Topic ARNs
-USER_ACCOUNT_TOPIC_ARN = os.environ.get('USER_ACCOUNT_TOPIC_ARN')
-TRANSACTION_TOPIC_ARN = os.environ.get('TRANSACTION_TOPIC_ARN')
+USER_ACCOUNT_TOPIC_ARN = arn:aws:sns:us-east-1:604665149129:StockerUserAccountTopic
+TRANSACTION_TOPIC_ARN = arn:aws:sns:us-east-1:604665149129:StockerTransactionTopic
 
 def send_notification(topic_arn, subject, message, attributes=None):
     """Send an SNS notification"""
     if not topic_arn:
         print(f"Warning: Missing SNS topic ARN for notification: {subject}")
         return False
-        
+
     try:
         kwargs = {
             'TopicArn': topic_arn,
             'Subject': subject,
             'Message': message
         }
-        
+
         if attributes:
             kwargs['MessageAttributes'] = attributes
-            
         response = sns.publish(**kwargs)
         return True
     except Exception as e:
         print(f"SNS notification failed: {str(e)}")
         return False
-
 # ------------------- Data Access Functions ------------------- #
-
 def get_user_by_email(email):
     """Get user by email"""
     table = dynamodb.Table(USER_TABLE)
@@ -140,13 +134,7 @@ def delete_trader_by_id(trader_id):
         print(f"User with ID {trader_id} has no email")
         return False
     
-    # 1. Delete all portfolio items for the user
-    portfolio_table = dynamodb.Table(PORTFOLIO_TABLE)
-    portfolio_response = portfolio_table.query(
-        KeyConditionExpression=Key('user_id').eq(trader_id)
-    )
-   
-    # 2. Delete the user
+    # 1. Delete the user
     user_table = dynamodb.Table(USER_TABLE)
     user_table.delete_item(Key={'email': trader_id})
     for item in portfolio_response.get('Items', []):
@@ -156,6 +144,11 @@ def delete_trader_by_id(trader_id):
                 'stock_id': item['stock_id']
             }
         )
+    # 2. Delete all portfolio items for the user
+    portfolio_table = dynamodb.Table(PORTFOLIO_TABLE)
+    portfolio_response = portfolio_table.query(
+        KeyConditionExpression=Key('user_id').eq(trader_id)
+    )
     
     # 3. We might want to keep transactions for audit purposes
     return True
@@ -316,7 +309,6 @@ def update_portfolio(user_id, stock_id, quantity, average_price):
             'average_price': Decimal(str(average_price))
         }
         table.put_item(Item=portfolio_item)
-
 # ------------------- Routes ------------------- #
 @app.route('/')
 def index():
