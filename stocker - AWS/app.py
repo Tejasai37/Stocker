@@ -423,7 +423,7 @@ def service01():
         trader_portfolio = get_user_portfolio(trader['id'])
         portfolio_value = 0
         for item in trader_portfolio:
-            portfolio_value += item['quantity'] * float(item['stock']['price'])
+            portfolio_value += float(portfolio['quantity']) * float(portfolio['stock']['price'])
         # Add this as an attribute to the trader object
         trader['total_portfolio_value'] = portfolio_value
     
