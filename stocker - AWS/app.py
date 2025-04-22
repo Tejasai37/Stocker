@@ -716,7 +716,7 @@ def service05():
     try:
         for item in portfolio:
             if 'stock' in item and 'price' in item['stock'] and 'quantity' in item:
-                total_value += item['quantity'] * float(item['stock']['price'])
+                total_value += float(item['quantity']) * float(item['stock']['price'])
     except Exception as e:
         print(f"Error calculating portfolio value: {str(e)}")
         flash("There was an issue calculating your portfolio value.", "warning")
