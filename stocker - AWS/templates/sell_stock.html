@@ -44,8 +44,8 @@
     <div class="row mb-4">
         <div class="col-12">
             <h2>Sell Stock: {{ stock.symbol }}</h2>
-            <p>{{ stock.name }} - Current Price: ${{ stock.price }}</p>
-            <p>You currently own: {{ portfolio_entry.quantity }} shares (avg. price: ${{ portfolio_entry.average_price }})</p>
+            <p>{{ stock.name }} - Current Price: ₹{{ stock.price }}</p>
+            <p>You currently own: {{ portfolio_entry.quantity }} shares (avg. price: ₹{{ portfolio_entry.average_price }})</p>
         </div>
     </div>
     
@@ -63,7 +63,7 @@
                             <label>Estimated Proceeds:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">₹</span>
                                 </div>
                                 <input type="text" class="form-control" id="total" readonly>
                             </div>
@@ -73,7 +73,7 @@
                             <label>Estimated Profit/Loss:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">₹</span>
                                 </div>
                                 <input type="text" class="form-control" id="profitLoss" readonly>
                             </div>
