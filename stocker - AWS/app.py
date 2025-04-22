@@ -22,17 +22,17 @@ AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
 # Set up boto3 session
 if AWS_ACCESS_KEY and AWS_SECRET_KEY:
     # Local development with explicit credentials
-    session = boto3.Session(
+    boto3_session = boto3.Session(
         aws_access_key_id=AWS_ACCESS_KEY,
         aws_secret_access_key=AWS_SECRET_KEY,
         region_name=AWS_REGION
     )
 else:
     # EC2 instance with IAM role
-    session = boto3.Session(region_name=AWS_REGION)
+    boto3_session = boto3.Session(region_name=AWS_REGION)
 
 # Create DynamoDB resource
-dynamodb = session.resource('dynamodb')
+dynamodb = boto3_session.resource('dynamodb')
 
 # Define table names
 USER_TABLE = 'stocker_users'
@@ -56,7 +56,7 @@ def clean_dynamo_response(response):
 
 # Create SNS client
 if AWS_ACCESS_KEY and AWS_SECRET_KEY:
-    sns = session.client('sns')
+    sns = boto3_session.client('sns')
 else:
     sns = boto3.client('sns', region_name=AWS_REGION)
 
