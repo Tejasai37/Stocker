@@ -31,10 +31,10 @@ Stocker is a comprehensive stock portfolio tracking application that allows user
 ```
 stocker/
 ├── app.py              # Application entry point
-├── setup_dynamodb.py
 ├── requirements.txt    # Python dependencies
 ├── static/             # Static files (CSS, JS)
 ├── templates/          # HTML templates
+├── setup_dynamodb.py   # Database setup file
 
 ```
 
