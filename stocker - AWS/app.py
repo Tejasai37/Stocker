@@ -400,7 +400,7 @@ def dashboard_trader():
         flash("Access denied. Traders only.", "danger")
         return redirect(url_for('login'))
 
-    user = get_user_by_email(session['email'])
+    user = get_user_by_email(session.get('email'))
     stocks = get_all_stocks()
     return render_template('dashboard_trader.html', user=user, market_data=stocks)
 
@@ -408,8 +408,14 @@ def dashboard_trader():
 def service01():
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
-        return redirect(url_for('login'))
-        
+        return redirect(url_for('login'))      
+    
+    user = get_user_by_email(session.get('email'))
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login')) 
+   
     traders = get_traders()
     
     # Calculate portfolio values for each trader
@@ -428,7 +434,12 @@ def delete_trader_route(trader_id):
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('login'))
-        
+   
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+   
     success = delete_trader(trader_id)
     if success:
         flash("Trader deleted successfully.", "success")
@@ -442,7 +453,13 @@ def service02():
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('login'))
-        
+       
+    user = get_user_by_email(session.get('email'))   
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+   
     transactions = get_transactions()
     return render_template('service-details-2.html', transactions=transactions)
 
@@ -451,7 +468,13 @@ def service03():
     if 'email' not in session or session.get('role') != 'admin':
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('login'))
-        
+       
+    user = get_user_by_email(session.get('email'))   
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))    
+   
     portfolios = get_portfolios()
     
     # Calculate total portfolio value
@@ -470,7 +493,12 @@ def service04():
         flash("Access denied. Traders only.", "danger")
         return redirect(url_for('login'))
     
-    user = get_user_by_email(session['email'])
+    user = get_user_by_email(session.get('email'))
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+       
     stocks = get_all_stocks()
     return render_template('service-details-4.html', user=user, stocks=stocks)
 
@@ -479,8 +507,14 @@ def buy_stock(stock_id):
     if 'email' not in session or session.get('role') != 'trader':
         flash("Access denied. Traders only.", "danger")
         return redirect(url_for('login'))
-    
-    user = get_user_by_email(session['email'])
+      
+    user = get_user_by_email(session.get('email'))   
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+       
+    user = get_user_by_email(session.get('email'))
     stock = get_stock_by_id(stock_id)
     
     if not stock:
@@ -559,8 +593,13 @@ def sell_stock(stock_id):
     if 'email' not in session or session.get('role') != 'trader':
         flash("Access denied. Traders only.", "danger")
         return redirect(url_for('login'))
-    
-    user = get_user_by_email(session['email'])
+    user = get_user_by_email(session.get('email'))
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+       
+    user = get_user_by_email(session.get('email'))
     stock = get_stock_by_id(stock_id)
     
     if not stock:
@@ -637,8 +676,14 @@ def service05():
     if 'email' not in session or session.get('role') != 'trader':
         flash("Access denied. Traders only.", "danger")
         return redirect(url_for('login'))
-    
-    user = get_user_by_email(session['email'])
+       
+    user = get_user_by_email(session.get('email'))   
+    if not user:
+       session.clear()
+       flash("Your account no longer exists.", "danger")
+       return redirect(url_for('login'))
+   
+    user = get_user_by_email(session.get('email'))
     
     # Get portfolio with stock details
     portfolio = get_user_portfolio(user['id'])
